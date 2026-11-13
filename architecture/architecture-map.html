@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Promum AI: architecture map</title>
+<style>
+  @page { size: 420mm 297mm; margin: 9mm; }
+  :root { --dark:#0F172A; --accent:#FF6B35; --tint:#FFEFE7; --gray:#475569; --light:#64748B; --border:#E2E8F0; --green:#059669; --gtint:#ECFDF5; --blue:#2563EB; --btint:#EFF6FF; --bg:#F8FAFC; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--dark); font: 14px/1.55 Inter, system-ui, "Segoe UI", sans-serif; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .wrap { max-width: 1440px; margin: 0 auto; padding: 28px 16px 48px; }
+  h1 { font: 700 24px Unbounded, Inter, sans-serif; margin: 0 0 6px; }
+  h1 span { color: var(--accent); }
+  h2 { font: 600 17px Unbounded, Inter, sans-serif; margin: 34px 0 12px; }
+  .sub { color: var(--gray); margin: 0 0 18px; max-width: 980px; }
+  .card { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 12px; overflow-x: auto; break-inside: avoid; }
+  svg { display: block; min-width: 1100px; width: 100%; height: auto; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; }
+  .flow { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; break-inside: avoid; }
+  .flow h3 { margin: 0 0 8px; font-size: 14.5px; }
+  .flow ol { margin: 0; padding-left: 20px; color: var(--gray); font-size: 13.5px; }
+  .flow li { margin: 3px 0; }
+  table { border-collapse: collapse; width: 100%; background: #fff; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; font-size: 13.5px; }
+  tr { break-inside: avoid; }
+  th, td { text-align: left; padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+  th { background: #F1F5F9; font-weight: 600; border-top: 0; }
+  .ok { color: var(--green); font-weight: 600; } .todo { color: #B45309; font-weight: 600; }
+  @media print {
+    body { background: #fff; }
+    .wrap { max-width: none; padding: 0; }
+    h1 { font-size: 22px; } .sub { margin-bottom: 8px; max-width: none; }
+    .card { overflow: visible; padding: 8px; }
+    svg { min-width: 0; width: 100%; height: 232mm; }
+    .pb { break-before: page; margin-top: 0; }
+    .grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Promum <span>AI</span>: architecture map</h1>
+  <p class="sub">Conceptual diagram, snapshot of 4 October 2026: who uses the platform, which modules it consists of, how the orchestrations (chat, search, research) work, where the data lives and how models are connected. Solid frames mean working; dashed frames mean planned.</p>
+
+  <div class="card">
+  <svg viewBox="0 0 1400 1060" xmlns="http://www.w3.org/2000/svg" font-family="Inter, system-ui, 'Segoe UI', sans-serif">
+    <defs>
+      <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#475569"/></marker>
+      <marker id="arA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#FF6B35"/></marker>
+    </defs>
+    <style>
+      .t { font-size: 13px; fill: #0F172A; font-weight: 600; }
+      .s { font-size: 11.5px; fill: #475569; }
+      .z { font-size: 12px; fill: #64748B; font-weight: 600; letter-spacing: .02em; text-transform: uppercase; }
+      .box { fill: #fff; stroke: #CBD5E1; stroke-width: 1.2; }
+      .core { fill: #fff; stroke: #FF6B35; stroke-width: 1.4; }
+      .data { fill: #fff; stroke: #059669; stroke-width: 1.4; }
+      .ext { fill: #fff; stroke: #2563EB; stroke-width: 1.4; }
+      .plan { fill: #fff; stroke: #94A3B8; stroke-width: 1.2; stroke-dasharray: 5 4; }
+      .ln { stroke: #475569; stroke-width: 1.4; fill: none; }
+      .lnA { stroke: #FF6B35; stroke-width: 1.6; fill: none; }
+      .lnP { stroke: #94A3B8; stroke-width: 1.3; fill: none; stroke-dasharray: 5 4; }
+    </style>
+
+    <!-- users -->
+    <text class="z" x="24" y="28">Users</text>
+    <rect class="box" x="170" y="40" width="300" height="62" rx="10"/><text class="t" x="186" y="64">Employee: chat (desktop, phone)</text><text class="s" x="186" y="84">questions, dashboards, search, research</text>
+    <rect class="box" x="520" y="40" width="300" height="62" rx="10"/><text class="t" x="536" y="64">Administrator: console</text><text class="s" x="536" y="84">access, sources, queue, system health</text>
+    <rect class="plan" x="870" y="40" width="330" height="62" rx="10"/><text class="t" x="886" y="64">Flow module: automations (planned)</text><text class="s" x="886" y="84">triggers and webhooks from ERP events</text>
+
+    <!-- platform -->
+    <rect x="16" y="130" width="1368" height="498" rx="16" fill="#FFF7F2" stroke="#FFD2BD"/>
+    <text class="z" x="32" y="154">Promum AI platform: customer server or partner cloud</text>
+    <line class="ln" x1="320" y1="102" x2="320" y2="172" marker-end="url(#ar)"/>
+    <line class="ln" x1="780" y1="102" x2="780" y2="172" marker-end="url(#ar)"/>
+
+    <rect class="core" x="32" y="172" width="270" height="66" rx="10"/><text class="t" x="46" y="196">Sign-in and permissions</text><text class="s" x="46" y="214">password or personal link; SSO planned;</text><text class="s" x="46" y="229">access to ERP objects: employee, department</text>
+    <rect class="core" x="316" y="172" width="400" height="66" rx="10"/><text class="t" x="330" y="196">Work modes: Chat · Search · Research</text><text class="s" x="330" y="214">Model mode: Auto · Maximum accuracy · Fast</text><text class="s" x="330" y="229">search is suggested when an answer is impossible without it</text>
+    <rect class="core" x="730" y="172" width="638" height="66" rx="10"/><text class="t" x="744" y="196">Management console</text><text class="s" x="744" y="214">employees, passwords and limits, sources and access, model roles, internet, metrics,</text><text class="s" x="744" y="229">research queue, system health, request and security logs</text>
+
+    <rect class="core" x="32" y="252" width="420" height="92" rx="10"/><text class="t" x="46" y="276">Chat orchestrator</text><text class="s" x="46" y="295">tool loop: calculation, ERP reads, documents, internet</text><text class="s" x="46" y="311">fast model for steps, deliberate for the answer; up to 4 calculations</text><text class="s" x="46" y="327">clarifying cards, memory; the answer does not depend on the browser tab</text>
+    <rect class="core" x="466" y="252" width="440" height="92" rx="10"/><text class="t" x="480" y="276">Research orchestrator + queue</text><text class="s" x="480" y="295">plan → edit → queue (admin: "first", cancel) →</text><text class="s" x="480" y="311">N parallel workers → gaps → wave 2 → report</text><text class="s" x="480" y="327">report: short version in chat, A4 PDF, PPTX deck, Excel</text>
+    <rect class="core" x="920" y="252" width="448" height="92" rx="10"/><text class="t" x="934" y="276">Verification and protection</text><text class="s" x="934" y="295">every number is checked against data, links [n] against sources;</text><text class="s" x="934" y="311">anonymization of internet queries; protection of system instructions;</text><text class="s" x="934" y="327" fill="#B91C1C">barrier: internet workers cannot see company data</text>
+
+    <rect class="core" x="32" y="358" width="330" height="92" rx="10"/><text class="t" x="46" y="382">Calculation layer</text><text class="s" x="46" y="401">the model writes a plan, the platform computes every row:</text><text class="s" x="46" y="417">exact, with control totals, Excel with live formulas;</text><text class="s" x="46" y="433">methods: forecast, XYZ, plan vs actual, stock, churn</text>
+    <rect class="core" x="376" y="358" width="240" height="92" rx="10"/><text class="t" x="390" y="382">Project documents</text><text class="s" x="390" y="401">document search,</text><text class="s" x="390" y="417">OCR of scans and photos</text><text class="s" x="390" y="433">(works without internet)</text>
+    <rect class="core" x="630" y="358" width="240" height="92" rx="10"/><text class="t" x="644" y="382">Artifacts</text><text class="s" x="644" y="401">dashboards and pages built on</text><text class="s" x="644" y="417">calculation results; page error control;</text><text class="s" x="644" y="433">download, save to a project</text>
+    <rect class="core" x="884" y="358" width="484" height="92" rx="10"/><text class="t" x="898" y="382">Operations</text><text class="s" x="898" y="401">dependency health (/api/health), error log, backups,</text><text class="s" x="898" y="417">file retention, production server (Waitress), automated tests;</text><text class="s" x="898" y="433">installer and services planned</text>
+
+    <rect class="data" x="32" y="464" width="420" height="148" rx="10"/><text class="t" x="46" y="488">ERP data gateway</text><text class="s" x="46" y="507">read-only, only permitted objects</text><text class="s" x="46" y="523">access log without data values</text><text class="s" x="46" y="539">condition type casting, names resolved from references</text><text class="s" x="46" y="555">rate limits and a source cache planned</text>
+    <rect class="ext" x="466" y="464" width="440" height="148" rx="10"/><text class="t" x="480" y="488">Web module</text><text class="s" x="480" y="507">search, page and PDF reading (OCR for scans)</text><text class="s" x="480" y="523">national root certificates handled automatically</text><text class="s" x="480" y="539">protection against reading internal addresses</text><text class="s" x="480" y="555">runs by itself or through the web gateway (closed perimeter)</text>
+    <rect class="box" x="920" y="464" width="448" height="148" rx="10"/><text class="t" x="934" y="488">Platform storage</text><text class="s" x="934" y="507">platform database: SQLite (WAL), PostgreSQL as it grows</text><text class="s" x="934" y="523">chats, permissions, logs, research jobs, settings</text><text class="s" x="934" y="539">files: Excel, PDF and PPTX reports, certificates, OCR models</text><text class="s" x="934" y="555">connection secrets (encryption planned)</text>
+
+    <!-- links down -->
+    <path class="lnA" d="M 240 344 L 240 358" marker-end="url(#arA)"/>
+    <path class="ln" d="M 240 612 L 240 638 L 700 638 L 700 660" marker-end="url(#ar)"/>
+    <text class="s" x="470" y="632">reads an ERP replica</text>
+    <path class="ln" d="M 780 612 L 780 648 L 1100 648 L 1100 660" marker-end="url(#ar)"/>
+    <text class="s" x="880" y="642">internet through the gateway</text>
+    <path class="ln" d="M 200 628 L 200 660" marker-end="url(#ar)"/>
+    <text class="s" x="40" y="652">model calls by role</text>
+
+    <!-- engine and models -->
+    <rect class="core" x="170" y="662" width="380" height="74" rx="10"/><text class="t" x="184" y="686">Model engine: LibreChat (engine only)</text><text class="s" x="184" y="705">role agents: deliberate and fast model</text><text class="s" x="184" y="721">(assigned in the console) · MongoDB database</text>
+    <path class="ln" d="M 360 736 L 360 760" marker-end="url(#ar)"/>
+    <rect class="ext" x="24" y="768" width="260" height="62" rx="10"/><text class="t" x="38" y="792">DeepSeek cloud (current)</text><text class="s" x="38" y="810">flash: with and without reasoning</text>
+    <rect class="ext" x="296" y="768" width="270" height="62" rx="10"/><text class="t" x="310" y="792">Regional providers</text><text class="s" x="310" y="810">via proxy; to be verified</text>
+    <rect class="ext" x="24" y="842" width="260" height="62" rx="10"/><text class="t" x="38" y="866">Local models (vLLM)</text><text class="s" x="38" y="884">Qwen / Gemma on the customer's GPUs</text>
+    <rect class="plan" x="296" y="842" width="270" height="62" rx="10"/><text class="t" x="310" y="866">AI gateway and router (planned)</text><text class="s" x="310" y="884">per-employee accounting, fallback provider</text>
+    <text class="s" x="24" y="930">Any OpenAI-compatible model is connected as an engine input;</text>
+    <text class="s" x="24" y="946">before delivery a qualification test set is run (automated tests).</text>
+
+    <!-- customer data -->
+    <rect class="data" x="600" y="662" width="330" height="92" rx="10"/><text class="t" x="614" y="686">ERP / trade management system</text><text class="s" x="614" y="705">REPLICA of the working database (refreshed by</text><text class="s" x="614" y="721">the customer every 30 min to 6 h), OData, read-only;</text><text class="s" x="614" y="737">the production database is not loaded by users</text>
+    <rect class="data" x="600" y="768" width="330" height="62" rx="10"/><text class="t" x="614" y="792">Documents</text><text class="s" x="614" y="810">uploaded into platform projects</text>
+    <rect class="plan" x="600" y="842" width="330" height="62" rx="10"/><text class="t" x="614" y="866">ERP event channel (planned)</text><text class="s" x="614" y="884">exchange plans / outbound call → Flow module</text>
+    <path class="lnP" d="M 765 904 L 765 962 L 1392 962 L 1392 71 L 1204 71" marker-end="url(#ar)"/>
+
+    <!-- internet -->
+    <rect class="ext" x="970" y="662" width="400" height="74" rx="10"/><text class="t" x="984" y="686">Web gateway (DMZ): the only way out</text><text class="s" x="984" y="705">access token, site lists, search keys,</text><text class="s" x="984" y="721">certificates; request log</text>
+    <path class="ln" d="M 1170 736 L 1170 760" marker-end="url(#ar)"/>
+    <rect class="ext" x="970" y="768" width="400" height="62" rx="10"/><text class="t" x="984" y="792">Search</text><text class="s" x="984" y="810">DuckDuckGo (test) · Brave · Tavily · SearXNG · regional (planned)</text>
+    <rect class="ext" x="970" y="842" width="400" height="62" rx="10"/><text class="t" x="984" y="866">Sites and PDFs</text><text class="s" x="984" y="884">including sites on national root certificates; read-only</text>
+
+    <!-- legend -->
+    <rect class="core" x="24" y="990" width="26" height="14" rx="3"/><text class="s" x="58" y="1002">platform module / engine</text>
+    <rect class="data" x="250" y="990" width="26" height="14" rx="3"/><text class="s" x="284" y="1002">company data</text>
+    <rect class="ext" x="430" y="990" width="26" height="14" rx="3"/><text class="s" x="464" y="1002">external services</text>
+    <rect class="plan" x="600" y="990" width="26" height="14" rx="3"/><text class="s" x="634" y="1002">planned</text>
+    <line class="lnA" x1="790" y1="997" x2="830" y2="997" marker-end="url(#arA)"/><text class="s" x="840" y="1002">calculation inside the platform</text>
+  </svg>
+  </div>
+
+  <h2 class="pb">How the work flows</h2>
+  <div class="grid">
+    <div class="flow"><h3>A question about data (chat)</h3><ol>
+      <li>Permissions: which ERP objects the employee may access.</li>
+      <li>The fast model writes a calculation plan (up to 4 at once).</li>
+      <li>The gateway reads the ERP replica; the calculation layer computes every row, adds names and control totals, and builds Excel.</li>
+      <li>If there is no data or too little, the platform does not build an empty report: the model comes back with a question on how to proceed.</li>
+      <li>The deliberate model writes the answer from the results; a dashboard on request.</li>
+      <li>Verification: every number must come from the data; otherwise the model corrects the answer.</li>
+    </ol></div>
+    <div class="flow"><h3>Internet search</h3><ol>
+      <li>The employee turns search on; if it is off and an answer is impossible without outside facts, the platform suggests turning it on.</li>
+      <li>Queries are anonymized first (company data does not leave).</li>
+      <li>Search and page reading run directly or through the web gateway.</li>
+      <li>The answer has links [n]; links and numbers are checked against what was read.</li>
+    </ol></div>
+    <div class="flow"><h3>Research</h3><ol>
+      <li>The deliberate model writes a plan; the employee edits and launches it.</li>
+      <li>Queue (the administrator can move a job up or cancel it).</li>
+      <li>Workers run in parallel: internet (quotes are checked against pages) and ERP (numbers against calculations).</li>
+      <li>Gaps lead to a second wave; the report has links [n] and [D] marks for company data.</li>
+      <li>Numbers and links are verified; a short version goes to the chat, the full report is a PDF (A4, charts and tables), a PPTX deck and Excel.</li>
+    </ol></div>
+  </div>
+
+  <h2>Readiness for delivery (15-20 users), as of 4 October 2026</h2>
+  <table>
+    <tr><th>Area</th><th>Done</th><th>Remaining before a pilot</th></tr>
+    <tr><td>Access</td><td class="ok">passwords and personal-link sign-in, pause after failed attempts, secure cookies, per-employee limits, request rate limiting, protection of system instructions</td><td class="todo">HTTPS through a proxy, SSO, secret encryption, administrator action log</td></tr>
+    <tr><td>Reliability</td><td class="ok">production server, WAL, system health, error log, backups, file cleanup</td><td class="todo">installer and services, scheduled MongoDB copy</td></tr>
+    <tr><td>Models</td><td class="ok">roles assigned in the console, model modes</td><td class="todo">provider registry in the console, router, a regional provider with a qualification test run</td></tr>
+    <tr><td>ERP data</td><td class="ok">database replica as a requirement, permissions, condition types</td><td class="todo">source limits and cache, a catalog of indicators, a connection wizard</td></tr>
+    <tr><td>Quality</td><td class="ok">automated tests (381 checks) and live scenarios on a model, code in a repository</td><td class="todo">regression on every engine and model update</td></tr>
+    <tr><td>Reports and analytics</td><td class="ok">dashboards, Excel with formulas, PDF and PPTX of research, analytical methods with a calculation passport, chat on a phone</td><td class="todo">report styling for the customer's brand, dashboard export to PDF</td></tr>
+  </table>
+</div>
+</body>
+</html>

@@ -37,26 +37,13 @@ Industrial companies want the "ChatGPT experience" over their own data, but run 
 
 A **modular monolith**: one application per customer installation, a mandatory free **core**, and paid **modules** in any combination.
 
-```mermaid
-flowchart TB
-    subgraph UI["Interface: shell with a module registry"]
-        direction LR
-        U1["Billing / Console / Showcases"] --- U2["GPT"] --- U3["Products"] --- U4["Flow"]
-    end
-    subgraph MOD["Modules (licensed)"]
-        direction LR
-        M1["GPT<br/>chat over company data,<br/>research, projects, memory"]
-        M2["Products<br/>packages, environments,<br/>roles, publishing pipeline"]
-        M3["Flow<br/>build products and<br/>automations in plain language"]
-    end
-    subgraph CORE["Core (always included)"]
-        direction LR
-        C1["Identity and access"] --- C2["License and settings"] --- C3["Audit"] --- C4["Secrets"]
-        C5["LLM transport<br/>with per-call accounting"] --- C6["Billing and limits"] --- C7["Connectors"] --- C8["Knowledge bases"] --- C9["Tool registry"]
-    end
-    UI --> MOD --> CORE
-    CORE --> EXT["Model gateway and models<br/>ERP and other customer systems<br/>Internet via a separate web gateway"]
-```
+### Architecture map
+
+[![Promum AI architecture map](architecture/architecture-map.png)](architecture/architecture-map.pdf)
+
+*Click the image for the vector PDF ([architecture-map.pdf](architecture/architecture-map.pdf), 2 pages: the diagram, the three main workflows and a delivery-readiness table). The editable source is [architecture-map.html](architecture/architecture-map.html). This is a snapshot of 4 October 2026: solid frames were working, dashed frames were planned. Since then the platform has been moving to the core-and-modules structure described below.*
+
+**Target structure.** The core (always included) holds identity and access, license and settings, audit, secrets, files, background jobs, the model transport with per-call accounting, billing and limits, connectors, knowledge bases and a tool registry. Three licensed modules sit on top of it: GPT, Products and Flow. The interface is a shell with a module registry.
 
 **Key decisions**
 
